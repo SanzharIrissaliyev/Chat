@@ -333,7 +333,7 @@ var global_var = [];
                     smss_container.append(get_new_user_sms_template(sms_item["sms"]));
                     $('.js-side-elem[data-id="'+ parent_id +'"]').addClass('newmsg');
                 }
-                if (sl != []) {
+                if (sl.length != 0) {
                     var audio = new Audio('/media/js/audio.wav');
                     audio.play();
                 }
