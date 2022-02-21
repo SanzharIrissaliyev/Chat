@@ -333,8 +333,10 @@ var global_var = [];
                     smss_container.append(get_new_user_sms_template(sms_item["sms"]));
                     $('.js-side-elem[data-id="'+ parent_id +'"]').addClass('newmsg');
                 }
-                var audio = new Audio('/media/js/audio.wav');
-                audio.play();
+                if (sl != []) {
+                    var audio = new Audio('/media/js/audio.wav');
+                    audio.play();
+                }
             }
 
         },
@@ -342,7 +344,7 @@ var global_var = [];
     });
 
   }
-  var msg_checker_interval = setInterval(get_new_messages, 1000);
+  var msg_checker_interval = setInterval(get_new_messages, 2000);
 
 
 
