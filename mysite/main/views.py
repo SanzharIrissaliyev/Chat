@@ -7,6 +7,7 @@ from main.models import *
 import requests
 import json
 from django.http import HttpResponse
+from django.db.models import Q
 
 def get_random_number(random_len):
     random_len = int(random_len)
@@ -58,9 +59,14 @@ def mainHandler(request):
         json_data = json.dumps(send_data)
         return HttpResponse(json_data, content_type="application/json")
 
-    sms_list = Sms.objects.all().order_by('date_time')
+#    sm.from_user_id == active_user.id or sm.to_user_id == active_user.id
+    sms_list = Sms.objects.filter(Q(from_user_id=user_id)|Q(to_user_id=user_id)).order_by('date_time')
+    for sl in sms_list:
+        if sl.to_user_id == user_id and sl.status == 0:
+            sl.status = 1
+            sl.save()
 
-    active_chat_id = 0;
+    active_chat_id = 0
     users_list = []
     if active_user:
         users_list = Siteuser.objects.all()
@@ -78,6 +84,54 @@ def mainHandler(request):
         'active_chat_id': active_chat_id,
         'sms_list': sms_list
     })
+
+
+def msgHandler(request):
+    user_id = request.session.get('user_id', None)
+    active_user = None
+    if user_id:
+        active_user = Siteuser.objects.get(id=int(user_id))
+
+
+    if request.GET:
+        action = request.GET.get('action', '')
+        if action == 'get_all_new_messages':
+            to_user_id = int(user_id)
+            sms_list = Sms.objects.filter(Q(to_user_id = to_user_id) & Q(status = 0)).order_by('date_time')
+            new_sms_list = []
+            for sl in sms_list:
+                new_sms = {
+                    "from_user_id": sl.from_user_id,
+                    "to_user_id": sl.to_user_id,
+                    "sms": sl.sms,
+                    "date_time": str(sl.date_time)[:19],
+                    "status": sl.status
+                }
+                print("***"*10)
+                print(sl)
+                sl.status = 1
+                sl.save()
+                new_sms_list.append(new_sms)
+
+
+            send_data = {"success": True, "_success": True, "sms_list": new_sms_list}
+            json_data = json.dumps(send_data)
+            return HttpResponse(json_data, content_type="application/json")
+
+    if request.POST:
+        print('*'*100)
+        print('read_all_sms')
+        action = request.POST.get('action', None)
+        if action == 'read_all_sms':
+            from_user_id = int(request.POST.get('from_user_id', 0))
+            if from_user_id:
+                sms_list = Sms.objects.filter(Q(from_user_id=from_user_id) & Q(to_user_id=user_id)).order_by('date_time')
+                for sl in sms_list:
+                    if sl.to_user_id == user_id and sl.status in [0, 1]:
+                        sl.status = 2
+                        sl.save()
+
+    return HttpResponse({"success": True, "_success": True}, content_type="application/json")
 
 
 def loginHandler(request):

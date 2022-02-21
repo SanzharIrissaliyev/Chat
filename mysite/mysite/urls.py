@@ -9,6 +9,7 @@ from mysite import settings
 
 urlpatterns = [
     path('', mainHandler),
+    path('msgs/', msgHandler),
     path('login/', loginHandler),
     path('logout', logoutHandler),
     path('register', registerHandler),

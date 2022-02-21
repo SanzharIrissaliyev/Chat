@@ -234,12 +234,44 @@
     return temp;
   }
 
+  function get_new_user_sms_template(sms_text){
+    var temp = '<div class="row message-body" style="height: 50px;">\n' +
+            '            <div class="col-sm-12 message-main-receiver">\n' +
+            '              <div class="receiver">\n' +
+            '                <div class="message-text">\n' +
+            sms_text +
+            '                </div>\n' +
+            '                <span class="message-time pull-right">\n' +
+            '                  Now\n' +
+            '                </span>\n' +
+            '              </div>\n' +
+            '            </div>\n' +
+            '          </div>';
+
+    return temp;
+  }
+
   $('.js-side-elem').click(function(){
     var clicked_elem_id = $(this).data("id");
     $('.js-side-cont').hide();
     $('.js-side-elem').removeClass('active');
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').show();
-    $(this).addClass('active');
+    $(this).addClass('active').removeClass('newmsg');
+
+    $.ajax({
+      type: "POST",
+      url: "/msgs/",
+      data: {
+        "action": "read_all_sms",
+        "csrfmiddlewaretoken": $('[name="csrfmiddlewaretoken"]').val(),
+        "from_user_id": clicked_elem_id
+      },
+      success: function (){
+
+      },
+      dataType: 'json'
+    });
+
     return false;
   });
 
@@ -281,12 +313,41 @@
       $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-send-sms').click();
     }
   })
+var global_var = [];
+  function get_new_messages(){
+    $.ajax({
+        url: '/msgs/',
+        data: {
+            "action": "get_all_new_messages"
+        },
+        success: function(data){
+            console.log(data["sms_list"]);
+            global_var = data["sms_list"];
+            if (data["sms_list"]){
+                var sl = data["sms_list"];
+                for (var smi in sl){
+                    var sms_item = sl[smi];
+                    var parent_id = sms_item["from_user_id"];
+                    var smss_container = $('.js-side-cont[data-id="'+ parent_id +'"]').find('.js-conversation-container');
+                    smss_container.append(get_new_user_sms_template(sms_item["sms"]));
+                    $('.js-side-elem[data-id="'+ parent_id +'"]').addClass('newmsg');
+                }
+            }
+        },
+        dataType: "json"
+    });
+
+  }
+  var msg_checker_interval = setInterval(get_new_messages, 1000);
 
 </script>
 
 <style>
   .sideBar-body.active{
     background-color: #a8e0f1;
+  }
+  .sideBar-body.newmsg{
+      background-color: #ffa500;
   }
 </style>
 
