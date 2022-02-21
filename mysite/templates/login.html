@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="login-form-container">
+    <h3 class="login-form-title header-head" style="margin-top: 100px;">Авторизация</h3>
+
+
+    <form class="login-form" action="/login/" method="POST">
+
+        {% if post_error %}
+            <h4 style="color: red; padding: 10px">
+            {% if post_error == 'USER_NOT_FOUND' %}
+                Пользователь не найден
+            {% endif %}
+            {% if post_error == 'ERROR_ARGUMENTS' %}
+                Введите все данные
+            {% endif %}
+            </h4>
+         {% endif %}
+     {% csrf_token %}
+        <br><br>
+        <input type="text" class="form-input" placeholder="Телефон или почта" name="login">
+        <br><br>
+        <input type="password" class="form-input" placeholder="Пароль" name="password">
+        <br><br>
+        <button class="btn btn-outline-success">LOGIN</button>
+    <br><br>
+    </form>
+    <br><br>
+
+</div>
+
+{% endblock %}

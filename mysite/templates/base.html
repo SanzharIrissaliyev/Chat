@@ -1,0 +1,59 @@
+{% if not active_user %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/media/css/style.css">
+    <script src="/media/js/jquery.js"></script>
+    <script src="/media/js/manage.js"></script>
+</head>
+<body>
+
+ <div class="top line">
+        <div class="middle">
+            <div class="top-left">
+            <a href="/">IT Hub</a>
+            <a href="/course">Видеокурсы</a>
+            <a href="#">Тест и практика</a>
+            <a href="#">Программы обучения </a>
+            {% if active_user %}<a href="/profile/courses">Мои курсы</a>{% endif %}
+        </div>
+        <div class="top-right">
+            {% if active_user %}
+                <a href="/profile/edit" class="btn btn-outline-success">{{ active_user.last_name }}{{ active_user.first_name }} {% if not active_user.last_name and not active_user.first_name %}{{ active_user.phone }} {{ active_user.email }} {% endif %}</a>
+                <a href="/logout" class="btn btn-outline-danger">Выход</a>
+
+            {% else %}
+                <a href="/login" class="btn btn-outline-success">Войти</a>
+                <a href="/register" class="btn btn-outline-danger">Регистрация</a>
+            {% endif %}
+        </div>
+        </div>
+    </div>
+
+{% block content %}
+
+
+{% endblock %}
+
+<div class="line footer">
+        <div class="middle">
+            © Все права защищены
+        </div>
+</div>
+</body>
+</html>
+{% else %}
+
+
+
+
+
+{% include 'zafar/index.html' %}
+
+
+
+
+
+{% endif %}
