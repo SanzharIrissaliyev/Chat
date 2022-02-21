@@ -256,6 +256,7 @@
     $('.js-side-cont').hide();
     $('.js-side-elem').removeClass('active');
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').show();
+    $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').find('.js-sms-body').focus();
     $(this).addClass('active').removeClass('newmsg');
 
     $.ajax({
@@ -339,6 +340,8 @@ var global_var = [];
 
   }
   var msg_checker_interval = setInterval(get_new_messages, 1000);
+
+
 
 </script>
 
