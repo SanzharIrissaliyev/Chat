@@ -70,18 +70,18 @@ def mainHandler(request):
     active_chat_id = 0
     users_list = []
     if active_user:
-        if search_value:
-            users_list = Siteuser.objects.filter(last_name__contains=search_value)
-            for i in users_list:
-                if i.id != user_id:
-                    active_chat_id = i.id
-                    break
-        else:
-            users_list = Siteuser.objects.all()
-            for i in users_list:
-                if i.id != user_id:
-                    active_chat_id = i.id
-                    break
+        # if search_value:
+        #     users_list = Siteuser.objects.filter(last_name__contains=search_value)
+        #     for i in users_list:
+        #         if i.id != user_id:
+        #             active_chat_id = i.id
+        #             break
+        # else:
+        users_list = Siteuser.objects.all()
+        for i in users_list:
+            if i.id != user_id:
+                active_chat_id = i.id
+                break
     print(users_list)
 
     return render(request, 'index.html', {
@@ -89,8 +89,7 @@ def mainHandler(request):
         'active_user': active_user,
         'users_list':users_list,
         'active_chat_id': active_chat_id,
-        'sms_list': sms_list,
-        'search_value': search_value
+        'sms_list': sms_list
     })
 
 

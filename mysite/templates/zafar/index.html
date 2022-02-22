@@ -48,10 +48,8 @@
           <div class="row searchBox">
             <div class="col-sm-12 searchBox-inner">
               <div class="form-group has-feedback">
-                  <form action="/" method="get">
-                    <input id="searchText" value="{{ search_value }}" type="text" class="form-control" name="q" placeholder="Search">
-                    <button type="submit" class="glyphicon glyphicon-search form-control-feedback"></button>
-                  </form>
+                <input id="searchText" value="" type="text" class="form-control js-search-input" name="q" placeholder="Search">
+                <button id="searchBtn" class="glyphicon glyphicon-search form-control-feedback"></button>
               </div>
             </div>
           </div>
@@ -72,7 +70,7 @@
                   <div class="col-sm-9 col-xs-9 sideBar-main">
                     <div class="row">
                       <div class="col-sm-8 col-xs-8 sideBar-name">
-                        <span class="name-meta">{{ul.last_name}}{{ul.phone}}
+                        <span class="name-meta js-side-elem-full-name">{{ul.last_name}} {{ul.phone}}
                       </span>
                       </div>
                       <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
@@ -354,6 +352,23 @@ var global_var = [];
   {#  if (e.key == "Escape") $('.save').click();#}
   {#       alert('sallll')});#}
 
+  $('.js-search-input').keyup(function(event){
+      var search_val = $(this).val();
+      $('.js-side-elem').hide();
+      $('.js-side-elem').each(function (a, b){
+          if ($(b).find('.js-side-elem-full-name').text().includes(search_val)){
+              $(b).show();
+          }
+      })
+
+      if (event.keyCode == 13){
+           $('.js-side-elem').show();
+           $(this).val("");
+      }
+
+
+      return false;
+  })
 
 </script>
 
