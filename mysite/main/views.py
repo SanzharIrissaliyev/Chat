@@ -37,6 +37,7 @@ def send_message(phone, sms):
 def mainHandler(request):
     user_id = request.session.get('user_id', None)
     active_user = None
+    search_value = request.GET.get('q', '')
     if user_id:
         active_user = Siteuser.objects.get(id=int(user_id))
 
@@ -69,20 +70,27 @@ def mainHandler(request):
     active_chat_id = 0
     users_list = []
     if active_user:
-        users_list = Siteuser.objects.all()
-        for i in users_list:
-            if i.id != user_id:
-                active_chat_id = i.id
-                break
+        if search_value:
+            users_list = Siteuser.objects.filter(last_name__contains=search_value)
+            for i in users_list:
+                if i.id != user_id:
+                    active_chat_id = i.id
+                    break
+        else:
+            users_list = Siteuser.objects.all()
+            for i in users_list:
+                if i.id != user_id:
+                    active_chat_id = i.id
+                    break
     print(users_list)
-
 
     return render(request, 'index.html', {
         'user_id': user_id,
         'active_user': active_user,
         'users_list':users_list,
         'active_chat_id': active_chat_id,
-        'sms_list': sms_list
+        'sms_list': sms_list,
+        'search_value': search_value
     })
 
 

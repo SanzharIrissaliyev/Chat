@@ -48,8 +48,10 @@
           <div class="row searchBox">
             <div class="col-sm-12 searchBox-inner">
               <div class="form-group has-feedback">
-                <input id="searchText" type="text" class="form-control" name="searchText" placeholder="Search">
-                <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                  <form action="/" method="get">
+                    <input id="searchText" value="{{ search_value }}" type="text" class="form-control" name="q" placeholder="Search">
+                    <button type="submit" class="glyphicon glyphicon-search form-control-feedback"></button>
+                  </form>
               </div>
             </div>
           </div>
@@ -60,8 +62,9 @@
 
             {% for ul in users_list %}
               {% if ul.id != user_id %}
-                <div class="row sideBar-body js-side-elem {% if active_chat_id == ul.id %} active {% endif %}" data-id="{{ ul.id }}">
-                  <div class="col-sm-3 col-xs-3 sideBar-avatar">
+                <div class="row sideBar-body js-side-elem  {% if active_chat_id == ul.id %} active {% endif %}" data-id="{{ ul.id }}">
+
+                    <div class="col-sm-3 col-xs-3 sideBar-avatar">
                     <div class="avatar-icon">
                       <img {% if ul.avatar %}src="/media/{{ul.avatar }}"{% else %}src="/media/img/logo.png" {% endif %}>
                     </div>
@@ -73,8 +76,9 @@
                       </span>
                       </div>
                       <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
-                        <span class="time-meta pull-right">18:18
-                      </span>
+                        <span class="time-meta pull-right">18:18</span>
+                          <span class=""></span>
+
                       </div>
                     </div>
                   </div>
@@ -172,7 +176,7 @@
                 <div class="sender">
                   <div class="message-text">
                     {{ sm.sms }}
-                  </div>
+                 </div>
                   <span class="message-time pull-right">
                     Sun
                   </span>
@@ -257,7 +261,8 @@
     $('.js-side-elem').removeClass('active');
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').show();
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').find('.js-sms-body').focus();
-    $(this).addClass('active').removeClass('newmsg');
+    $(this).addClass('active').removeClass('notification');
+
 
     $.ajax({
       type: "POST",
@@ -331,11 +336,11 @@ var global_var = [];
                     var parent_id = sms_item["from_user_id"];
                     var smss_container = $('.js-side-cont[data-id="'+ parent_id +'"]').find('.js-conversation-container');
                     smss_container.append(get_new_user_sms_template(sms_item["sms"]));
-                    $('.js-side-elem[data-id="'+ parent_id +'"]').addClass('newmsg');
+                    $('.js-side-elem[data-id="'+ parent_id +'"]').addClass('notification');
                 }
                 if (sl.length != 0) {
                     var audio = new Audio('/media/js/audio.wav');
-                    audio.play();
+                    //audio.play();
                 }
             }
 
@@ -345,18 +350,36 @@ var global_var = [];
 
   }
   var msg_checker_interval = setInterval(get_new_messages, 2000);
-
+  {#$(document).on('keydown', function(e) {#}
+  {#  if (e.key == "Escape") $('.save').click();#}
+  {#       alert('sallll')});#}
 
 
 </script>
 
 <style>
+
   .sideBar-body.active{
     background-color: #a8e0f1;
   }
-  .sideBar-body.newmsg{
-      background-color: #ffa500;
+
+  .sideBar-body.newmsg:after{
+      {#background-color: #ffa500;#}
+      {#margin-left: 200px;#}
+      {#content: '12';#}
+      {#display: block;#}
+      {#right: 2.3333em;#}
+      {#width: 2em;#}
+      {#position: absolute;#}
+      {#top: 38px;#}
+      {#border-radius: 50%;#}
+      {#font-size: 0.75em;#}
+      {#line-height: 2;#}
+      {#text-align: center;#}
+      {#animation: pulse 0.75s infinite;#}
   }
+
 </style>
 
 </html>
+

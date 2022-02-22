@@ -363,6 +363,10 @@ body {
   font-weight: 200;
   font-size: 14px;
   padding-bottom: 0 !important;
+  /*font-family: arial;*/
+  /*-ms-transform: scaleX(-1) rotate(-35deg); !* IE 9 *!*/
+  /*-webkit-transform: scaleX(-1) rotate(-35deg); !* Chrome, Safari, Opera *!*/
+  /*transform: scaleX(-1) rotate(-35deg);*/
 }
 
 .message-time {
@@ -376,7 +380,7 @@ body {
 
 .receiver {
   width: auto !important;
-  padding: 4px 10px 7px !important;
+  padding: 4px 10px 20px !important;
   border-radius: 10px 10px 10px 0;
   background: #ffffff;
   font-size: 12px;
@@ -390,7 +394,7 @@ body {
   width: auto !important;
   background: #dcf8c6;
   border-radius: 10px 10px 0 10px;
-  padding: 4px 10px 7px !important;
+  padding: 4px 10px 20px !important;
   font-size: 12px;
   text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
   display: inline-block;
@@ -464,6 +468,18 @@ body {
   border: none;
   text-indent: 5px;
   box-shadow: none;
+}
+.notification{
+    position: absolute;
+    top: 27px;
+    left: 60px;
+    border-radius: 50px;
+    width: 24px;
+    background-color: red;
+    height: 24px;
+    text-align: center;
+    color: white;
+    content: '12';
 }
 
 @media screen and (max-width: 700px) {
