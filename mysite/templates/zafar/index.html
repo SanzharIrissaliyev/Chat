@@ -60,7 +60,7 @@
 
             {% for ul in users_list %}
               {% if ul.id != user_id %}
-                <div class="row sideBar-body js-side-elem  {% if active_chat_id == ul.id %} active {% endif %}" data-id="{{ ul.id }}">
+                <div class="row sideBar-body js-side-elem {% if ul.unread_sms_count > 0 %} newmsg {% endif %}  {% if active_chat_id == ul.id %} active {% endif %}" data-id="{{ ul.id }}">
 
                     <div class="col-sm-3 col-xs-3 sideBar-avatar">
                     <div class="avatar-icon">
@@ -75,8 +75,7 @@
                       </div>
                       <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
                         <span class="time-meta pull-right">18:18</span>
-                          <span class=""></span>
-
+                          <span class="notification pull-right js-new-sms-count">{{ ul.unread_sms_count }}</span>
                       </div>
                     </div>
                   </div>
@@ -259,7 +258,8 @@
     $('.js-side-elem').removeClass('active');
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').show();
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').find('.js-sms-body').focus();
-    $(this).addClass('active').removeClass('notification');
+    $(this).addClass('active').removeClass('newmsg');
+    $(this).find('.js-new-sms-count').text(0);
 
 
     $.ajax({
@@ -334,7 +334,9 @@ var global_var = [];
                     var parent_id = sms_item["from_user_id"];
                     var smss_container = $('.js-side-cont[data-id="'+ parent_id +'"]').find('.js-conversation-container');
                     smss_container.append(get_new_user_sms_template(sms_item["sms"]));
-                    $('.js-side-elem[data-id="'+ parent_id +'"]').addClass('notification');
+                    $('.js-side-elem[data-id="'+ parent_id +'"]').addClass('newmsg');
+                    var new_sms_count = parseInt($('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-new-sms-count').text(), 10) + 1;
+                    $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-new-sms-count').text(new_sms_count);
                 }
                 if (sl.length != 0) {
                     var audio = new Audio('/media/js/audio.wav');
@@ -378,20 +380,14 @@ var global_var = [];
     background-color: #a8e0f1;
   }
 
-  .sideBar-body.newmsg:after{
-      {#background-color: #ffa500;#}
-      {#margin-left: 200px;#}
-      {#content: '12';#}
-      {#display: block;#}
-      {#right: 2.3333em;#}
-      {#width: 2em;#}
-      {#position: absolute;#}
-      {#top: 38px;#}
-      {#border-radius: 50%;#}
-      {#font-size: 0.75em;#}
-      {#line-height: 2;#}
-      {#text-align: center;#}
-      {#animation: pulse 0.75s infinite;#}
+  .sideBar-body.newmsg{
+      background-color: #ffa500;
+  }
+  .js-new-sms-count{
+      display: none;
+  }
+  .sideBar-body.newmsg .js-new-sms-count{
+      display: block;
   }
 
 </style>

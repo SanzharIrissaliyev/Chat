@@ -35,7 +35,7 @@ def send_message(phone, sms):
 
 
 def mainHandler(request):
-    user_id = request.session.get('user_id', None)
+    user_id = int(request.session.get('user_id', None))
     active_user = None
     search_value = request.GET.get('q', '')
     if user_id:
@@ -61,11 +61,26 @@ def mainHandler(request):
         return HttpResponse(json_data, content_type="application/json")
 
 #    sm.from_user_id == active_user.id or sm.to_user_id == active_user.id
+    users_list = Siteuser.objects.all()
+    user_list_obj = {}
+    for us in users_list:
+        new_us = {
+            "last_name": us.last_name,
+            "first_name": us.first_name,
+            "id": us.id,
+            "avatar": us.avatar,
+            "phone": us.phone,
+            "unread_sms_count": 0
+        }
+        user_list_obj[us.id] = new_us
+
     sms_list = Sms.objects.filter(Q(from_user_id=user_id)|Q(to_user_id=user_id)).order_by('date_time')
     for sl in sms_list:
         if sl.to_user_id == user_id and sl.status == 0:
             sl.status = 1
             sl.save()
+        if sl.to_user_id == user_id and sl.status == 1:
+            user_list_obj[sl.from_user_id]["unread_sms_count"] += 1
 
     active_chat_id = 0
     users_list = []
@@ -77,17 +92,19 @@ def mainHandler(request):
         #             active_chat_id = i.id
         #             break
         # else:
-        users_list = Siteuser.objects.all()
         for i in users_list:
             if i.id != user_id:
                 active_chat_id = i.id
                 break
     print(users_list)
+    users_list_new = []
+    for i in user_list_obj:
+        users_list_new.append(user_list_obj[i])
 
     return render(request, 'index.html', {
         'user_id': user_id,
         'active_user': active_user,
-        'users_list':users_list,
+        'users_list': users_list_new,
         'active_chat_id': active_chat_id,
         'sms_list': sms_list
     })

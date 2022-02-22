@@ -226,6 +226,15 @@ body {
   color: rgba(0, 0, 0, .4);
   vertical-align: baseline;
 }
+.notification{
+    border-radius: 50px;
+    width: 24px;
+    background-color: red;
+    height: 24px;
+    text-align: center;
+    color: white;
+    margin-top: -15px;
+}
 
 /*New Message*/
 
@@ -468,18 +477,6 @@ body {
   border: none;
   text-indent: 5px;
   box-shadow: none;
-}
-.notification{
-    position: absolute;
-    top: 27px;
-    left: 60px;
-    border-radius: 50px;
-    width: 24px;
-    background-color: red;
-    height: 24px;
-    text-align: center;
-    color: white;
-    content: '12';
 }
 
 @media screen and (max-width: 700px) {
