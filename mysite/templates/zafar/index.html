@@ -56,12 +56,11 @@
 
           <!-- Search Box End -->
           <!-- sideBar -->
-          <div class="row sideBar">
 
+          <div class="row sideBar">
             {% for ul in users_list %}
               {% if ul.id != user_id %}
                 <div class="row sideBar-body js-side-elem {% if ul.unread_sms_count > 0 %} newmsg {% endif %}  {% if active_chat_id == ul.id %} active {% endif %}" data-id="{{ ul.id }}">
-
                     <div class="col-sm-3 col-xs-3 sideBar-avatar">
                     <div class="avatar-icon">
                       <img {% if ul.avatar %}src="/media/{{ul.avatar }}"{% else %}src="/media/img/logo.png" {% endif %}>
@@ -70,8 +69,8 @@
                   <div class="col-sm-9 col-xs-9 sideBar-main">
                     <div class="row">
                       <div class="col-sm-8 col-xs-8 sideBar-name">
-                        <span class="name-meta js-side-elem-full-name">{{ul.last_name}} {{ul.phone}}
-                      </span>
+                        <span class="name-meta js-side-elem-full-name">{{ul.last_name}} {{ ul.phone }}</span>
+                           <span class="sent-meta pull-left">1</span>
                       </div>
                       <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
                         <span class="time-meta pull-right">18:18</span>
@@ -142,7 +141,6 @@
 
         <!-- Message Box -->
         <div class="row message js-conversation-container" >
-
           <div class="row message-previous" style="height: 50px; display: none;">
             <div class="col-sm-12 previous">
               <a onclick="previous(this)" id="ankitjain28" name="20">
@@ -317,7 +315,8 @@
       $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-send-sms').click();
     }
   })
-var global_var = [];
+
+  var global_var = [];
   function get_new_messages(){
     $.ajax({
         url: '/msgs/',

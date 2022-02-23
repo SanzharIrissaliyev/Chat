@@ -9,6 +9,7 @@ import json
 from django.http import HttpResponse
 from django.db.models import Q
 
+
 def get_random_number(random_len):
     random_len = int(random_len)
     a = pow(10, random_len)
@@ -33,9 +34,8 @@ def send_message(phone, sms):
     print(sms)
 
 
-
 def mainHandler(request):
-    user_id = int(request.session.get('user_id', None))
+    user_id = request.session.get('user_id', None)
     active_user = None
     search_value = request.GET.get('q', '')
     if user_id:
