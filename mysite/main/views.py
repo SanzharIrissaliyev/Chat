@@ -116,7 +116,6 @@ def msgHandler(request):
     if user_id:
         active_user = Siteuser.objects.get(id=int(user_id))
 
-
     if request.GET:
         action = request.GET.get('action', '')
         if action == 'get_all_new_messages':
@@ -136,7 +135,6 @@ def msgHandler(request):
                 sl.status = 1
                 sl.save()
                 new_sms_list.append(new_sms)
-
 
             send_data = {"success": True, "_success": True, "sms_list": new_sms_list}
             json_data = json.dumps(send_data)
@@ -184,7 +182,6 @@ def loginHandler(request):
     return render(request, 'login.html', {'post_error': post_error})
 
 
-
 def logoutHandler(request):
     request.session['user_id'] = None
     return redirect('/')
@@ -204,7 +201,6 @@ def registerHandler(request):
                    password_hash = md5()
                    password_hash.update(old_password.encode())
                    new_passwoord = password_hash.hexdigest()
-
                    new_site_user.password = new_passwoord
                    new_site_user.save()
                    message = 'Kod dlya registrasiya ' + str(old_password)
@@ -213,19 +209,16 @@ def registerHandler(request):
                else:
                    new_site_user = Siteuser()
                    new_site_user.phone = phone
-
                    old_password = str(get_random_number(4))
                    print("****"*10)
                    print(old_password)
                    password_hash = md5()
                    password_hash.update(old_password.encode())
                    new_passwoord = password_hash.hexdigest()
-
                    new_site_user.password = new_passwoord
                    new_site_user.save()
                    message = 'Kod dlya registrasiya ' + str(old_password)
                    #send_message(phone, message)
-
                    return redirect('/login/')
             else:
                 print('FORMAT ErROR')
