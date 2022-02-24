@@ -65,7 +65,8 @@
                     <div class="row">
                       <div class="col-sm-8 col-xs-8 sideBar-name">
                         <span class="name-meta js-side-elem-full-name">{{ul.last_name}} {{ ul.phone }}</span>
-                           <span class="sent-meta pull-left">1</span>
+                                <span class="sent-meta pull-left js-pop" >
+                                    <div class="sent-meta check pull-left js-check"></div>{{ pop.sms }}</span>
                       </div>
                       <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
                         <span class="time-meta pull-right">18:18</span>
@@ -244,6 +245,19 @@
 
     return temp;
   }
+  {#function get_base_sms_template(sms_text){#}
+  {#  var temp = '<div class="row message-body" style="height: 50px;">\n' +#}
+  {#          '            <div class="col-sm-12 message-main-sender">\n' +#}
+  {#          '              <div class="sender">\n' +#}
+  {#          '                <div class="message-text">\n' +#}
+  {#          sms_text +#}
+  {#          '                </div>\n' +#}
+  {#          '              </div>\n' +#}
+  {#          '            </div>\n' +#}
+  {#          '          </div>';#}
+  {##}
+  {#  return temp;#}
+  {#}#}
 
   $('.js-side-elem').click(function(){
     var clicked_elem_id = $(this).data("id");
@@ -252,6 +266,7 @@
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').show();
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').find('.js-sms-body').focus();
     $(this).addClass('active').removeClass('newmsg');
+    {#var butt=document.getElementById('butt');butt.disabled = 'disabled'; butt.innerHTML = '✓✓';#}
     $(this).find('.js-new-sms-count').text(0);
 
 
@@ -291,6 +306,9 @@
       success: function (){
           smss_container.append(get_new_sms_template(msg));
           $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-sms-body').val("");
+          $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-pop').text(msg);
+          {#$('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-check').addClass('check-1');#}
+
           //var audio = new Audio('/media/js/audio.wav');
           //audio.play();
           var audio = new Audio('/media/js/send.mp3');
@@ -302,6 +320,7 @@
     console.log(msg);
     return false;
   })
+
 
   $('.js-sms-body').keyup(function (event){
     var parent_id = $(this).parents('.js-side-cont').data("id");
@@ -325,12 +344,14 @@
                 var sl = data["sms_list"];
                 for (var smi in sl){
                     var sms_item = sl[smi];
+                    var sms_last = sms_item["sms"];
                     var parent_id = sms_item["from_user_id"];
                     var smss_container = $('.js-side-cont[data-id="'+ parent_id +'"]').find('.js-conversation-container');
                     smss_container.append(get_new_user_sms_template(sms_item["sms"]));
                     $('.js-side-elem[data-id="'+ parent_id +'"]').addClass('newmsg');
                     var new_sms_count = parseInt($('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-new-sms-count').text(), 10) + 1;
                     $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-new-sms-count').text(new_sms_count);
+                    $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-pop').text(sms_last);
                 }
                 if (sl.length != 0) {
                     var audio = new Audio('/media/js/audio.wav');
@@ -375,13 +396,34 @@
   }
 
   .sideBar-body.newmsg{
-      background-color: #ffa500;
+      background-color: purple;
   }
   .js-new-sms-count{
       display: none;
   }
   .sideBar-body.newmsg .js-new-sms-count{
       display: block;
+  }
+  .check{
+      width: 26px;
+  }
+  .check-1{
+      background-image: url(/media/img/read.png);
+      background-size: 75%;
+      background-repeat: no-repeat;
+      width: 26px;
+  }
+  .check-2{
+      background-image: url("/media/img/2.png");
+      background-size: 75%;
+      background-repeat: no-repeat;
+      width: 26px;
+  }
+  .check-3{
+      background-image: url("/media/img/3.png");
+      background-size: 75%;
+      background-repeat: no-repeat;
+      width: 26px;
   }
 
 </style>
