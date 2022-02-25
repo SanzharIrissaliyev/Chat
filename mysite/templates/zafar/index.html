@@ -306,7 +306,7 @@
       success: function (){
           smss_container.append(get_new_sms_template(msg));
           $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-sms-body').val("");
-          $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-pop').text(msg);
+          $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-pop').html('<div class="sent-meta check pull-left js-check check-1">' + msg);
           {#$('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-check').addClass('check-1');#}
 
           //var audio = new Audio('/media/js/audio.wav');
