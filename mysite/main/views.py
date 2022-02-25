@@ -9,6 +9,7 @@ import json
 from django.http import HttpResponse
 from django.db.models import Q
 
+
 def get_random_number(random_len):
     random_len = int(random_len)
     a = pow(10, random_len)
@@ -33,9 +34,8 @@ def send_message(phone, sms):
     print(sms)
 
 
-
 def mainHandler(request):
-    user_id = int(request.session.get('user_id', None))
+    user_id = request.session.get('user_id', None)
     active_user = None
     search_value = request.GET.get('q', '')
     if user_id:
@@ -75,6 +75,9 @@ def mainHandler(request):
         user_list_obj[us.id] = new_us
 
     sms_list = Sms.objects.filter(Q(from_user_id=user_id)|Q(to_user_id=user_id)).order_by('date_time')
+    pop = Sms.objects.filter(Q(from_user_id=user_id)|Q(to_user_id=user_id)).order_by('-date_time')[0]
+    print("30"*100)
+    print(pop)
     for sl in sms_list:
         if sl.to_user_id == user_id and sl.status == 0:
             sl.status = 1
@@ -106,7 +109,8 @@ def mainHandler(request):
         'active_user': active_user,
         'users_list': users_list_new,
         'active_chat_id': active_chat_id,
-        'sms_list': sms_list
+        'sms_list': sms_list,
+        'pop': pop
     })
 
 
@@ -115,7 +119,6 @@ def msgHandler(request):
     active_user = None
     if user_id:
         active_user = Siteuser.objects.get(id=int(user_id))
-
 
     if request.GET:
         action = request.GET.get('action', '')
@@ -136,7 +139,6 @@ def msgHandler(request):
                 sl.status = 1
                 sl.save()
                 new_sms_list.append(new_sms)
-
 
             send_data = {"success": True, "_success": True, "sms_list": new_sms_list}
             json_data = json.dumps(send_data)
@@ -184,7 +186,6 @@ def loginHandler(request):
     return render(request, 'login.html', {'post_error': post_error})
 
 
-
 def logoutHandler(request):
     request.session['user_id'] = None
     return redirect('/')
@@ -204,7 +205,6 @@ def registerHandler(request):
                    password_hash = md5()
                    password_hash.update(old_password.encode())
                    new_passwoord = password_hash.hexdigest()
-
                    new_site_user.password = new_passwoord
                    new_site_user.save()
                    message = 'Kod dlya registrasiya ' + str(old_password)
@@ -213,19 +213,16 @@ def registerHandler(request):
                else:
                    new_site_user = Siteuser()
                    new_site_user.phone = phone
-
                    old_password = str(get_random_number(4))
                    print("****"*10)
                    print(old_password)
                    password_hash = md5()
                    password_hash.update(old_password.encode())
                    new_passwoord = password_hash.hexdigest()
-
                    new_site_user.password = new_passwoord
                    new_site_user.save()
                    message = 'Kod dlya registrasiya ' + str(old_password)
                    #send_message(phone, message)
-
                    return redirect('/login/')
             else:
                 print('FORMAT ErROR')
