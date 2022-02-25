@@ -18,6 +18,7 @@
   <script type="text/javascript" src="/media/zafar/javascript.js"></script>
 </head>
 <body>
+
 {% csrf_token %}
   <div class="container app">
     <div class="row app-one">
@@ -66,7 +67,7 @@
                       <div class="col-sm-8 col-xs-8 sideBar-name">
                         <span class="name-meta js-side-elem-full-name">{{ul.last_name}} {{ ul.phone }}</span>
                                 <span class="sent-meta pull-left js-pop" >
-                                    <div class="sent-meta check pull-left js-check"></div>{{ pop.sms }}</span>
+                                    <div class="sent-meta check pull-left js-check check-1">   </div>{{ pop.sms }}</span>
                       </div>
                       <div class="col-sm-4 col-xs-4 pull-right sideBar-time">
                         <span class="time-meta pull-right">18:18</span>
@@ -204,12 +205,15 @@
     </div>
     <!-- App One End -->
   </div>
-
+{#<input type="text" value="{{ pop.status }}" class="ali-sms">#}
   <!-- App End -->
 </body>
 
 
 <script>
+
+    {#var ali= $('.ali-sms').val();#}
+    {#alert(ali);#}
   var active_container_id = {{active_chat_id}};
 
   function get_new_sms_template(sms_text){
@@ -291,6 +295,8 @@
     var parent_id = $(this).parents('.js-side-cont').data("id");
     var smss_container = $(this).parents('.js-side-cont').find('.js-conversation-container');
     var msg = $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-sms-body').val();
+
+
     /*
     THERE WILL BE POST REQUEST
     * */
@@ -306,7 +312,7 @@
       success: function (){
           smss_container.append(get_new_sms_template(msg));
           $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-sms-body').val("");
-          $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-pop').text(msg);
+          $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-pop').html(' <div class="sent-meta check pull-left js-check check-1">   </div>' + msg);
           {#$('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-check').addClass('check-1');#}
 
           //var audio = new Audio('/media/js/audio.wav');
@@ -356,6 +362,7 @@
                 if (sl.length != 0) {
                     var audio = new Audio('/media/js/audio.wav');
                     //audio.play();
+                    $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-pop').text(sms_last);
                 }
             }
 

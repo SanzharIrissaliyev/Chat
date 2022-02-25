@@ -75,9 +75,11 @@ def mainHandler(request):
         user_list_obj[us.id] = new_us
 
     sms_list = Sms.objects.filter(Q(from_user_id=user_id)|Q(to_user_id=user_id)).order_by('date_time')
-    pop = Sms.objects.filter(Q(from_user_id=user_id)|Q(to_user_id=user_id)).order_by('-date_time')[0]
-    print("30"*100)
-    print(pop)
+    pop = Sms.objects.filter(Q(from_user_id=user_id)|Q(to_user_id=user_id)).order_by('-date_time')
+    if pop:
+        pop = pop[0]
+    else:
+        pop = None
     for sl in sms_list:
         if sl.to_user_id == user_id and sl.status == 0:
             sl.status = 1
