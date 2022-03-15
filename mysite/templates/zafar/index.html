@@ -11,11 +11,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="/media/zafar/style.css">
+
   <!-- Font Awesome File -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="/media/zafar/javascript.js"></script>
+
 </head>
 <body>
 
@@ -185,10 +187,10 @@
         <!-- Reply Box -->
         <div class="row reply">
           <div class="col-sm-1 col-xs-1 reply-emojis">
-            <i class="fa fa-smile-o fa-2x"></i>
+            <i class="fa fa-smile-o fa-2x" id="myTextarea"></i>
           </div>
           <div class="col-sm-9 col-xs-9 reply-main">
-            <textarea class="form-control js-sms-body" rows="1" ></textarea>
+            <textarea class="form-control js-sms-body" rows="1"></textarea>
           </div>
           <div class="col-sm-1 col-xs-1 reply-recording">
             <i class="fa fa-microphone fa-2x" aria-hidden="true"></i>
@@ -270,6 +272,7 @@
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').show();
     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').find('.js-sms-body').focus();
     $(this).addClass('active').removeClass('newmsg');
+     $('.js-side-cont[data-id="'+ clicked_elem_id +'"]').find('.js-conversation-container').stop().animate({scrollTop:9999});
     {#var butt=document.getElementById('butt');butt.disabled = 'disabled'; butt.innerHTML = '✓✓';#}
     $(this).find('.js-new-sms-count').text(0);
 
@@ -294,7 +297,7 @@
   $('.js-send-sms').click(function (){
     var parent_id = $(this).parents('.js-side-cont').data("id");
     var smss_container = $(this).parents('.js-side-cont').find('.js-conversation-container');
-    var msg = $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-sms-body').val();
+    var msg = $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-sms-body').val().trim();
 
 
     /*
@@ -312,11 +315,10 @@
       success: function (){
           smss_container.append(get_new_sms_template(msg));
           $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-sms-body').val("");
-<<<<<<< HEAD
           $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-pop').html('<div class="sent-meta check pull-left js-check check-1">' + msg);
-=======
           $('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-pop').html(' <div class="sent-meta check pull-left js-check check-1">   </div>' + msg);
->>>>>>> e8fefab6c751b548cc3f56cb6b3811865024949c
+          $('.js-side-cont[data-id="'+ parent_id +'"]').find('.js-conversation-container').stop().animate({scrollTop:9999});
+
           {#$('.js-side-elem[data-id="'+ parent_id +'"]').find('.js-check').addClass('check-1');#}
 
           //var audio = new Audio('/media/js/audio.wav');
@@ -327,18 +329,25 @@
       dataType: 'json'
     });
 
-    console.log(msg);
     return false;
   })
 
 
-  $('.js-sms-body').keyup(function (event){
+  $('.js-sms-body').keyup(function(event){
     var parent_id = $(this).parents('.js-side-cont').data("id");
-    console.log(parent_id);
-    if (event.keyCode == 13){
-      $('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-send-sms').click();
+    if ($('.js-side-cont[data-id="'+ parent_id + '"]').find('.js-sms-body').val().trim() != '') {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            $('.js-side-cont[data-id="' + parent_id + '"]').find('.js-send-sms').click();
+        }
     }
   })
+
+  $('textarea').on('keydown', function( el ) {
+        if( el.keyCode === 13 ) {
+            el.preventDefault();
+        }
+    });
 
   var global_var = [];
   function get_new_messages(){
@@ -375,6 +384,8 @@
     });
 
   }
+
+
   var msg_checker_interval = setInterval(get_new_messages, 2000);
   {#$(document).on('keydown', function(e) {#}
   {#  if (e.key == "Escape") $('.save').click();#}
@@ -399,6 +410,16 @@
   })
 
 </script>
+
+{#<script>#}
+{#    $(document).ready(function (){#}
+{#        $("#myTextarea").emojioneArea({#}
+{##}
+{#        pickerPosition: "bottom"#}
+{#           })#}
+{#    })#}
+{##}
+{#</script>#}
 
 <style>
 

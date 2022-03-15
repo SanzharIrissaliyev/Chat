@@ -80,10 +80,6 @@ def mainHandler(request):
         pop = pop[0]
     else:
         pop = None
-<<<<<<< HEAD
-
-=======
->>>>>>> e8fefab6c751b548cc3f56cb6b3811865024949c
     for sl in sms_list:
         if sl.to_user_id == user_id and sl.status == 0:
             sl.status = 1
